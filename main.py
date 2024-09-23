@@ -30,9 +30,9 @@ async def scrape_bbc(url: str):
 
         # Collect all text from BBC paragraphs
         paragraphs = soup.find_all("p")  # Get all <p> tags
-        text = "\n".join([p.get_text() for p in paragraphs])
+        text_array = [p.get_text().strip() for p in paragraphs if p.get_text().strip()]
 
-        return {"text": text.strip()}
+        return {"paragraphs": text_array}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -46,9 +46,9 @@ async def scrape_cnn(url: str):
 
         # Collect all text from CNN paragraphs
         paragraphs = soup.find_all("p")  # Get all <p> tags
-        text = "\n".join([p.get_text() for p in paragraphs])
+        text_array = [p.get_text().strip() for p in paragraphs if p.get_text().strip()]
 
-        return {"text": text.strip()}
+        return {"paragraphs": text_array}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
