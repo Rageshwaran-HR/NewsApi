@@ -23,36 +23,32 @@ async def fetch_content(url: str) -> str:
 
 
 @app.get("/scrape/bbc")
-async def bbc(url: str):
+async def scrape_bbc(url: str):
     try:
         content = await fetch_content(url)
         soup = BeautifulSoup(content, "html.parser")
 
-        # Example selector, adjust as needed
-        headline = soup.find("h1")
-        if headline is None:
-            raise ValueError("Failed to find the headline in the article.")
+        # Collect all text from BBC paragraphs
+        paragraphs = soup.find_all("p")  # Get all <p> tags
+        text = "\n".join([p.get_text() for p in paragraphs])
 
-        title = headline.text.strip()
-        return {"title": title}
+        return {"text": text.strip()}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/scrape/cnn")
-async def cnn(url: str):
+async def scrape_cnn(url: str):
     try:
         content = await fetch_content(url)
         soup = BeautifulSoup(content, "html.parser")
 
-        # Example selector, adjust as needed
-        headline = soup.find("h1")
-        if headline is None:
-            raise ValueError("Failed to find the headline in the article.")
+        # Collect all text from CNN paragraphs
+        paragraphs = soup.find_all("p")  # Get all <p> tags
+        text = "\n".join([p.get_text() for p in paragraphs])
 
-        title = headline.text.strip()
-        return {"title": title}
+        return {"text": text.strip()}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
